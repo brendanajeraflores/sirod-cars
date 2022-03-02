@@ -1,0 +1,80 @@
+<template>
+    <div class="div-grid">
+        <div class="div-breadcrumbs">
+            <lightning-breadcrumbs>
+                <lightning-breadcrumb
+                    label="Home"
+                    href="http://example.com/parent">
+                </lightning-breadcrumb>
+                <lightning-breadcrumb
+                    label="Simulator"
+                    href="http://example.com/case">
+                </lightning-breadcrumb>
+            </lightning-breadcrumbs>
+        </div>
+
+        <lightning-combobox 
+			label="Model" 
+			name="model"
+			onchange={searchKeywordModel} 
+			options={pcklValuesModel} 
+			placeholder="--None--" 
+			value={selectedModel}
+			
+			>
+		</lightning-combobox>
+
+        <lightning-input type="text" label="Amount" value={selectedAmount} onchange={inputChangeAmount}></lightning-input>
+
+        <lightning-input type="text" label="Down payment" value={selectedDownPay} onchange={inputChangeDownPay}></lightning-input>
+
+        <lightning-combobox 
+			label="Term" 
+			name="term"
+			onchange={searchKeywordType} 
+			options={pcklValuesType} 
+			placeholder="--None--" 
+			value={selectedType}>
+		</lightning-combobox>
+		
+		<div class="row">
+
+			<lightning-button 
+                label="Calculate"
+                onclick={calculate}
+                variant="brand"
+                class="div-button"
+                disabled={disabledSearchButton}>
+            </lightning-button>
+
+            <lightning-button
+                variant="brand-outline"
+                label="Download as CSV"
+                title="Download as CSV"
+                onclick={downloadCSVFile}
+                icon-name="utility:download"
+                class="slds-p-around_xxx-small div-button"
+                disabled={disabledDownloadButton}>
+            </lightning-button>
+
+            <lightning-button 
+                label="Delete filters"
+                onclick={deleteFilters}
+                variant="brand-outline"
+                class="div-button"
+                disabled={disabledSearchButton}>
+            </lightning-button>
+		</div>
+        <template if:true={boolShowDataTable}>
+            <div class="row">
+                <lightning-datatable
+                        key-field="id"
+                        data={dataTable}
+                        columns={columns}
+                        column-widths-mode="auto"
+                        hide-checkbox-column>
+                </lightning-datatable>
+            </div>
+        </template>
+    </div>
+</template>

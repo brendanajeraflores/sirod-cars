@@ -1,0 +1,78 @@
+<template>
+	<div class="div-grid">
+		<div class="div-breadcrumbs">
+			<lightning-breadcrumbs>
+				<lightning-breadcrumb
+					label="Home"
+					href="http://example.com/parent">
+				</lightning-breadcrumb>
+				<lightning-breadcrumb
+					label="Cars/Models"
+					href="http://example.com/case">
+				</lightning-breadcrumb>
+			</lightning-breadcrumbs>
+		</div>
+
+		<lightning-combobox 
+			label="Type" 
+			name="type"
+			onchange={searchKeywordType} 
+			options={pcklValuesType} 
+			placeholder="--None--" 
+			value={selectedType}
+			
+			>
+		</lightning-combobox><br/> 
+		
+		<lightning-combobox 
+			label="Brand" 
+			name="brand" 
+			onchange={searchKeywordBrand} 
+			options={pcklValuesBrand} 
+			placeholder="--None--" 
+			value={selectedBrand}
+			>
+		</lightning-combobox><br/>
+
+		 
+		<lightning-combobox 
+			label="Model" 
+			name="model"
+			onchange={searchKeywordModel} 
+			options={pcklValuesModel} 
+			placeholder="--None--" 
+			value={selectedModel}
+			
+			>
+		</lightning-combobox><br/>   
+
+		<div class="row">
+			<lightning-button 
+			label="Search"
+			onclick={handleSearchKeyword}
+			variant="brand"
+			class="div-button"
+			disabled={disabledSearchButton}>
+			</lightning-button>
+
+			<lightning-button 
+			label="Delete filters"
+			onclick={deleteFilters}
+			variant="brand-outline"
+			class="div-button"
+			disabled={disabledSearchButton}>
+			</lightning-button>
+		</div>
+
+		<div class="div-table">
+			<c-custom-data-table-cars
+				key-field="textCol"
+				columns={columns}
+				data={tableData}
+				hide-checkbox-column>
+			</c-custom-data-table-cars>
+		</div>
+		<!--<lightning-datatable key-field="id" data={data} columns={columns} hide-checkbox-column>
+		</lightning-datatable>-->
+	</div>
+</template>

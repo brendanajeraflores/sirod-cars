@@ -1,0 +1,22 @@
+<template>
+    <div class="div-grid">
+        <div class="div-breadcrumbs">
+            <lightning-breadcrumbs>
+                <lightning-breadcrumb
+                    label="Home"
+                    href="http://example.com/parent">
+                </lightning-breadcrumb>
+                <lightning-breadcrumb
+                    label="Appointments"
+                    href="http://example.com/case">
+                </lightning-breadcrumb>
+            </lightning-breadcrumbs>
+        </div>
+        <lightning-record-form 
+            object-api-name={leadObject}
+            fields={leadFields} 
+            columns="2"
+            onsuccess={handleSuccess}>
+        </lightning-record-form>
+    </div>
+</template>

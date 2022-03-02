@@ -1,0 +1,46 @@
+<template>
+    <div class="div-grid">
+        <img src='/sfc/servlet.shepherd/version/download/0688c000007XNLJAA4' style="width:auto; height:40vh;"/>
+        <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+            <div class="slds-size_1-of-5"></div>
+            <div class="slds-size_3-of-5">
+                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small">
+                    <lightning-carousel>
+                        <template for:each={carsList} for:item="car">
+                            <lightning-carousel-image
+                            key={car.price}
+                            src = "{car.src}"
+                            header = "{car.name}"
+                            description = "{car.price}"
+                            alternative-text = "First card accessible description."
+                            href = "javascript:void(0);">
+                            </lightning-carousel-image>
+                        </template>
+                        <!--<lightning-carousel-image
+                            src = "https://www.lightningdesignsystem.com/assets/images/carousel/carousel-01.jpg"
+                            header = "First Card"
+                            description = "First card description."
+                            alternative-text = "First card accessible description."
+                            href = "javascript:void(0);">
+                        </lightning-carousel-image>
+                        <lightning-carousel-image
+                            src = "https://www.lightningdesignsystem.com/assets/images/carousel/carousel-02.jpg"
+                            header = "Second Card"
+                            description = "Second card description."
+                            alternative-text = "Second card accessible description."
+                            href = "javascript:void(0);">
+                        </lightning-carousel-image>
+                        <lightning-carousel-image
+                            src = "https://www.lightningdesignsystem.com/assets/images/carousel/carousel-03.jpg"
+                            header = "Third Card"
+                            description = "Third card description."
+                            alternative-text = "Third card accessible description."
+                            href = "javascript:void(0);">
+                        </lightning-carousel-image>-->
+                    </lightning-carousel>
+                </div>
+            </div>
+            <div class="slds-size_1-of-5"></div>
+        </div>
+    </div>
+</template>

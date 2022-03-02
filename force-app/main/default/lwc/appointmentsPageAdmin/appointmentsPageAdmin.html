@@ -1,0 +1,27 @@
+<template>
+    <div class="div-grid">
+        <div class="div-breadcrumbs">
+            <lightning-breadcrumbs>
+                <lightning-breadcrumb
+                    label="Home"
+                    href="http://example.com/parent">
+                </lightning-breadcrumb>
+                <lightning-breadcrumb
+                    label="Appointments"
+                    href="http://example.com/case">
+                </lightning-breadcrumb>
+            </lightning-breadcrumbs>
+        </div>
+        <template if:true={boolShowDataTable}>
+            <div class="row">
+                <lightning-datatable
+                        key-field="Id"
+                        data={dataTable}
+                        columns={columns}
+                        column-widths-mode="auto"
+                        hide-checkbox-column>
+                </lightning-datatable>
+            </div>
+        </template>
+    </div>
+</template>
