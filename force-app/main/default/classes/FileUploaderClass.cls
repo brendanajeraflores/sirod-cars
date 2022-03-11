@@ -81,7 +81,7 @@ public with sharing class FileUploaderClass {
 
     List<ContentDocumentLink> listContentDocument = [SELECT ContentDocumentId,LinkedEntityId
                                                     FROM ContentDocumentLink 
-                                                    WHERE LinkedEntityId =: productsIds];
+                                                    WHERE LinkedEntityId IN: productsIds];
 
     for (ContentDocumentLink cont : listContentDocument) {
       lstContent.add(cont.ContentDocumentId);
@@ -90,7 +90,7 @@ public with sharing class FileUploaderClass {
 
     List<ContentVersion> listContentVersion = [SELECT Id, ContentDocumentId 
                                                     FROM ContentVersion 
-                                                    WHERE ContentDocumentId =: lstContent];
+                                                    WHERE ContentDocumentId IN: lstContent];
 
     for (ContentVersion contV : listContentVersion) {
       if(mapContentFile.containsKey(contV.ContentDocumentId)){
