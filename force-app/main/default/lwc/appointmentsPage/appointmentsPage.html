@@ -12,11 +12,65 @@
                 </lightning-breadcrumb>
             </lightning-breadcrumbs>
         </div>
-        <lightning-record-form 
-            object-api-name={leadObject}
-            fields={leadFields} 
-            columns="2"
-            onsuccess={handleSuccess}>
-        </lightning-record-form>
+        <!--  ----------------------------------------------------------------------  -->
+        <!--  NOTE: Please add the following <META> element to your page <HEAD>.      -->
+        <!--  If necessary, please modify the charset parameter to specify the        -->
+        <!--  character set of your HTML page.                                        -->
+        <!--  ----------------------------------------------------------------------  -->
+
+
+        <!--  ----------------------------------------------------------------------  -->
+        <!--  NOTE: Please add the following <FORM> element to your page.             -->
+        <!--  ----------------------------------------------------------------------  -->
+    
+        <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
+    
+            <input type=hidden name="oid" value="00D8c000004t57m">
+            <input type=hidden name="retURL" value="https://demo-bnf-company-developer-edition.na213.force.com/sirodcaragency/s/">
+        
+            <!--  ----------------------------------------------------------------------  -->
+            <!--  NOTE: These fields are optional debugging elements. Please uncomment    -->
+            <!--  these lines if you wish to test in debug mode.                          -->
+            <!--  <input type="hidden" name="debug" value=1>                              -->
+            <!--  <input type="hidden" name="debugEmail"                                  -->
+            <!--  value="brendanajeraflores@gmail.com">                                   -->
+            <!--  ----------------------------------------------------------------------  -->
+            <lightning-layout>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <label for="first_name">First Name</label><br>
+                    <input  id="first_name" maxlength="40" name="first_name" size="20" type="text" class="slds-input"/><br>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <label for="last_name">Last Name</label><br>
+                    <input  id="last_name" maxlength="80" name="last_name" size="20" type="text" class="slds-input"/><br>
+                </lightning-layout-item>
+            </lightning-layout>
+            
+            <lightning-layout>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <label for="email">Email</label><br>
+                    <input  id="email" maxlength="80" name="email" size="20" type="text" class="slds-input"/><br>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <label for="company">Company</label><br>
+                    <input  id="company" maxlength="40" name="company" size="20" type="text" class="slds-input"/><br>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    State:<br>
+                    <input  id="00N8c00000OLKlm" maxlength="50" name="00N8c00000OLKlm" size="20" type="text" class="slds-input"/><br>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    City:<br>
+                    <input  id="00N8c00000OLK2m" maxlength="50" name="00N8c00000OLK2m" size="20" type="text" class="slds-input"/><br>
+                </lightning-layout-item>
+            </lightning-layout>
+            
+            <div class="row">
+                <input type="submit" name="submit" class="slds-button slds-button_brand">
+            </div>
+        </form>
     </div>
 </template>

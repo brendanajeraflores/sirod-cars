@@ -10,3 +10,13 @@ body {
 .div-breadcrumbs {
     padding-bottom: 20px;
 }
+
+.row{
+    text-align:center;
+}
+
+.div-button{
+    margin:0 10px;
+    display:inline-block;
+    line-height: 60px;
+}

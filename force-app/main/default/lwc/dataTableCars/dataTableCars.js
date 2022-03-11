@@ -17,9 +17,10 @@ export default class dataTableCars extends LightningElement {
         { label: 'Type', fieldName: 'type'},
         { label: 'Model', fieldName: 'model'},
         { label: 'Price', fieldName: 'price', type: 'currency' },
+        { label: "Image", fieldName: "image", type: "image" }
         
         // custom richText column
-       { label: "Image", fieldName: "image", type: "richText", wrapText: true }
+       //{ label: "Image", fieldName: "image", type: "richText", wrapText: true }
     ];
     @track pcklValuesBrand = [];
     @track pcklValuesType = [];
@@ -42,8 +43,9 @@ export default class dataTableCars extends LightningElement {
     @wire(getProducts, {})
     wiredGetProducts({error, data}){
         if(data && !this.isLoaded){
-            console.log({data});
-            this.tableData = data.map((item, index) => {
+            console.log(JSON.stringify(data));
+            this.tableData = data;
+            /*this.tableData = data.map((item, index) => {
                 return {
                     //image: 'imagen',
                     color: item.Color__c,
@@ -54,7 +56,7 @@ export default class dataTableCars extends LightningElement {
                     model: item.Model__c
 
                 }
-            });
+            });*/
             this.tableDataAll = this.tableData;
         }
     }
@@ -117,7 +119,8 @@ export default class dataTableCars extends LightningElement {
         })
         .then(result => {
             console.log({result});
-            this.tableData = result.map((item, index) => {
+            this.tableData = result;
+            /*this.tableData = result.map((item, index) => {
                 return {
                     //image: 'imagen',
                     color: item.Color__c,
@@ -127,7 +130,7 @@ export default class dataTableCars extends LightningElement {
                     image: item.Image__c,
                     model: item.Model__c
                 }
-            });
+            });*/
             
         })
         .catch(error => {

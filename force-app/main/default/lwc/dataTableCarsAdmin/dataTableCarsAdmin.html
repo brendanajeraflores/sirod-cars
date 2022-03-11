@@ -27,14 +27,24 @@
 		</div>
 
 		<div class="div-table">
-			<c-custom-data-table-cars
+			<!--<c-custom-data-table-cars
 				key-field="Id"
 				columns={columns}
 				data={tableData}
 				hide-checkbox-column
 				onsave={handleSave}
                 draft-values={draftValues}>
-			</c-custom-data-table-cars>
+			</c-custom-data-table-cars>-->
+
+			<c-image-data-table
+                key-field="Id"
+                data={tableData}
+                show-row-number-column="false"
+                hide-checkbox-column
+                columns={columns}
+				onsave={handleSave}
+                draft-values={draftValues}>
+ 			</c-image-data-table>
 		</div>
 
 		<template if:true={isModalOpen}>
@@ -66,37 +76,52 @@
 							value={productRecord.Name}>
 						</lightning-input>
 
-						<lightning-input 
+						<lightning-combobox 
 							label="Brand" 
-							name="Brand__c"
+							name="Brand__c" 
 							onchange={handleChange} 
+							options={pcklValuesBrand} 
 							class="slds-var-p-around_x-small"
-							value={productRecord.Brand__c}>
-						</lightning-input>
+							placeholder="--None--" 
+							value={productRecord.Brand__c}
+							>
+						</lightning-combobox>
 
-						<lightning-input 
+						<lightning-combobox 
 							label="Type" 
 							name="Type__c"
 							onchange={handleChange} 
-							class="slds-var-p-around_x-small"
-							value={productRecord.Type__c}>
-						</lightning-input>
+							options={pcklValuesType}
+							class="slds-var-p-around_x-small" 
+							placeholder="--None--" 
+							value={productRecord.Type__c}
+							
+							>
+						</lightning-combobox>
 
-						<lightning-input 
+						<lightning-combobox 
 							label="Model" 
 							name="Model__c"
 							onchange={handleChange} 
+							options={pcklValuesModel} 
 							class="slds-var-p-around_x-small"
-							value={productRecord.Model__c}>
-						</lightning-input>
+							placeholder="--None--" 
+							value={productRecord.Model__c}
+							
+							>
+						</lightning-combobox>
 
-						<lightning-input 
+						<lightning-combobox 
 							label="Color" 
 							name="Color__c"
 							onchange={handleChange} 
+							options={pcklValuesColor} 
 							class="slds-var-p-around_x-small"
-							value={productRecord.Color__c}>
-						</lightning-input>
+							placeholder="--None--" 
+							value={productRecord.Color__c}
+							
+							>
+						</lightning-combobox>
 
 						<lightning-input 
 							label="Price" 
@@ -112,7 +137,7 @@
 									label="Is active?" 
 									name="IsActive"
 									type="checkbox"
-									onchange={handleChange} 
+									onchange={handleChangeCheck} 
 									class="slds-var-p-around_x-small"
 									value={productRecord.IsActive}>
 								</lightning-input>
@@ -123,7 +148,7 @@
 									label="Is car" 
 									name="Is_car__c"
 									type="checkbox"
-									onchange={handleChange} 
+									onchange={handleChangeCheck} 
 									class="slds-var-p-around_x-small"
 									value={productRecord.Is_car__c}
 									checked disabled>
@@ -135,7 +160,7 @@
 									label="In carousel" 
 									type="checkbox"
 									name="In_carousel__c"
-									onchange={handleChange} 
+									onchange={handleChangeCheck} 
 									class="slds-var-p-around_x-small"
 									value={productRecord.In_carousel__c}>
 								</lightning-input>

@@ -61,6 +61,7 @@ public with sharing class FileUploaderClass {
       WHERE Id =: contentVersionId
     ].ContentDocumentId;
     cdl.LinkedEntityId = productId;
+    cdl.Visibility = 'AllUsers';
     // ShareType is either 'V', 'C', or 'I'
     // V = Viewer, C = Collaborator, I = Inferred
     cdl.ShareType = 'V';
@@ -72,4 +73,32 @@ public with sharing class FileUploaderClass {
       return null;
     }
   }
+
+  public static Map<String, String> getProductsFiles(List<String> productsIds){
+    Map<String, String> mapProductFile = new Map<String, String>();
+    Map<String, String> mapContentFile = new Map<String, String>();
+    List<String> lstContent = new List<String>();
+
+    List<ContentDocumentLink> listContentDocument = [SELECT ContentDocumentId,LinkedEntityId
+                                                    FROM ContentDocumentLink 
+                                                    WHERE LinkedEntityId =: productsIds];
+
+    for (ContentDocumentLink cont : listContentDocument) {
+      lstContent.add(cont.ContentDocumentId);
+      mapContentFile.put(cont.ContentDocumentId, cont.LinkedEntityId);
+    }
+
+    List<ContentVersion> listContentVersion = [SELECT Id, ContentDocumentId 
+                                                    FROM ContentVersion 
+                                                    WHERE ContentDocumentId =: lstContent];
+
+    for (ContentVersion contV : listContentVersion) {
+      if(mapContentFile.containsKey(contV.ContentDocumentId)){
+        mapProductFile.put(mapContentFile.get(contV.ContentDocumentId), contV.Id);
+      }
+    }
+
+    return mapProductFile;
+  }
+    
 }

@@ -1,9 +1,14 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import getProductsCarousel from '@salesforce/apex/homePageCarsController.getProductsCarousel';
+import communityId from '@salesforce/community/Id';
+import communityBasePath from '@salesforce/community/basePath';
 
 export default class HomePageCars extends LightningElement {
     @api buttonText;
     carsList = [];
+    sfdcBaseURL = '';
+    imageTest = '';
+    imageTestD = '';
 
     @track isLoaded = false;
 
@@ -11,11 +16,15 @@ export default class HomePageCars extends LightningElement {
 
     })
     wiredGetProductsCarousel({error, data}){
+        
         console.log('data1 '+data);
         console.log('error '+error);
+        console.log('communityId '+communityId);
+        console.log('communityBasePath '+communityBasePath);
+        ///sfsites/c/sfc/servlet.shepherd/version/download/0688c000007XNLJAA4  ContentVersionId
         if(data && !this.loaded){
-            console.log('data2 '+data);
-            this.carsList = data.map((item, index) => {
+            console.log('data2 '+JSON.stringify(data));
+            this.carsList = data;/*data.map((item, index) => {
                 console.log('item '+item);
                 var mySubString = item.Image__c.substring(
                     item.Image__c.indexOf("=") + 2, 
@@ -37,7 +46,11 @@ export default class HomePageCars extends LightningElement {
                     src: mySubString
 
                 }
-            });
+            });*/
         }
+    }
+
+    getBaseUrl(){
+        this.sfdcBaseURL = window.location.origin;
     }
 }

@@ -1,4 +1,5 @@
 import { LightningElement, wire, api, track } from 'lwc';
+import getValuesPicklist from '@salesforce/apex/DataTableCarsController.getValuesPicklist';
 import getProducts from '@salesforce/apex/DataTableCarsController.getProducts';
 import getProductsRefresh from '@salesforce/apex/DataTableCarsController.getProductsRefresh';
 import { updateRecord } from 'lightning/uiRecordApi';
@@ -16,6 +17,7 @@ import ISCAR_FIELD from '@salesforce/schema/Product2.Is_car__c';
 import INCAROUSEL_FIELD from '@salesforce/schema/Product2.In_carousel__c';
 
 
+
 import uploadFile from '@salesforce/apex/FileUploaderClass.uploadFile'
 import ACCOUNT_OBJECT from "@salesforce/schema/Account";
 import { createRecord } from "lightning/uiRecordApi";
@@ -27,7 +29,11 @@ export default class DataTableCarsAdmin extends LightningElement {
     @track showToast = false;
     @track messageSuccess = '';
     @track showToastUpdated = false;
-    productRecord = {};
+    @track pcklValuesBrand = [];
+    @track pcklValuesType = [];
+    @track pcklValuesModel = [];
+    @track pcklValuesColor = [];
+    productRecord = {"Is_car__c" : true};
     fileData
 
     tableData = [];
@@ -41,8 +47,9 @@ export default class DataTableCarsAdmin extends LightningElement {
         { label: 'Model', fieldName: 'model', editable: true, fieldNameObj: 'Model__c'},
         { label: 'Price', fieldName: 'price', type: 'currency', editable: true , fieldNameObj: 'Price__c'},
         { label: 'Is Active?', fieldName: 'isActive', editable: true, type: 'boolean', fieldNameObj: 'IsActive'},
+        { label: "Image", fieldName: "image", type: "image" }
         // custom richText column
-       { label: "Image", fieldName: "image", type: "richText", wrapText: true }
+       //{ label: "Image", fieldName: "image", type: "richText", wrapText: true }
     ];
 
     //Field to lightning-record-form 
@@ -53,7 +60,8 @@ export default class DataTableCarsAdmin extends LightningElement {
     wiredGetProducts({error, data}){
         if(data && !this.isLoaded){
             console.log({data});
-            this.tableData = data.map((item, index) => {
+            this.tableData = data;
+            /*this.tableData = data.map((item, index) => {
                 return {
                     //image: 'imagen',
                     Id: item.Id,
@@ -66,8 +74,24 @@ export default class DataTableCarsAdmin extends LightningElement {
                     isActive: item.IsActive
 
                 }
-            });
+            });*/
             
+        }
+    }
+
+    @wire(getValuesPicklist, {})
+    wiredGetValuesPicklist({error, data}){
+        console.log({data});    
+        if(data && !this.isLoaded){
+            console.log({data});
+            this.pcklValuesBrand = data.lstPicklistBrand;
+            this.pcklValuesType = data.lstPicklistType;
+            this.pcklValuesModel = data.lstPicklistModel;
+            this.pcklValuesColor = data.lstPicklistColor;
+
+            
+        } else if(error) {
+            console.log(JSON.stringify(error));
         }
     }
 
@@ -81,7 +105,8 @@ export default class DataTableCarsAdmin extends LightningElement {
         getProductsRefresh({})
             .then(result => {
                 console.log(JSON.stringify(result));
-                this.tableData = result.map((item, index) => {
+                this.tableData = result;
+                /*this.tableData = result.map((item, index) => {
                     return {
                         //image: 'imagen',
                         Id : item.Id,
@@ -93,7 +118,7 @@ export default class DataTableCarsAdmin extends LightningElement {
                         model: item.Model__c,
                         isActive: item.IsActive
                     }
-                });
+                });*/
                 
                 
             })
@@ -105,8 +130,6 @@ export default class DataTableCarsAdmin extends LightningElement {
                     message: error.body.message,
                 });
                 this.dispatchEvent(event);
-                // reset contacts var with null   
-                this.contactsRecord = null;
             });
     }
     
@@ -169,18 +192,15 @@ export default class DataTableCarsAdmin extends LightningElement {
         }
         reader.readAsDataURL(file)
     }
-    
-    handleClick(){
-        const {base64, filename, recordId} = this.fileData
-        uploadFile({ base64, filename, recordId }).then(result=>{
-            this.fileData = null
-            let title = `${filename} uploaded successfully!!`
-            this.toast(title)
-        })
-    }
 
     handleChange(event) {
+        console.log(JSON.stringify(event.target.value));
         this.productRecord[event.target.name] = event.target.value;
+    }
+
+    handleChangeCheck(event) {
+        console.log(JSON.stringify(event.target.checked));
+        this.productRecord[event.target.name] = event.target.checked;
     }
 
     createProduct() {
@@ -191,25 +211,24 @@ export default class DataTableCarsAdmin extends LightningElement {
         console.log('fields '+JSON.stringify(fields));
         console.log('fileData '+JSON.stringify(this.fileData));
 
-        createRecord(recordInput)
-            .then((product) => {
-                const productId = product.id;
-                console.log('product '+product.id);
+        createRecord(recordInput).then((product) => {
+            const productId = product.id;
+            console.log('product '+product.id);
 
-                const {base64, filename, recordId} = this.fileData
-                uploadFile({ base64, filename, productId }).then(result=>{
-                    this.fileData = null
-                    let title = `${filename} uploaded successfully!!`
-                    console.log('result '+JSON.stringify(result));
-                })
+            const {base64, filename, recordId} = this.fileData
+            uploadFile({ base64, filename, productId }).then(result=>{
+                this.fileData = null
+                let title = `${filename} uploaded successfully!!`
+                console.log('result '+JSON.stringify(result));
+            })
 
-                this.productRecord = {};
-            })
-            .catch((error) => {
-                console.log('Error '+JSON.stringify(error));
-            })
-            .finally(() => {
-                this.isLoading = false;
-            });
+            this.productRecord = {};
+        })
+        .catch((error) => {
+            console.log('Error '+JSON.stringify(error));
+        })
+        .finally(() => {
+            this.isLoading = false;
+        });
     }
 }

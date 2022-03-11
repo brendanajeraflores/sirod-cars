@@ -1,22 +1,67 @@
 public with sharing class DataTableCarsController {
     public DataTableCarsController() {}
 
-    @AuraEnabled(cacheable=true)
-    public static List<Product2> getProducts() {
-        List<Product2> listProducts = new List<Product2>();
-
-        listProducts = [SELECT Id, Color__c, Brand__c, Price__c, Type__c, Image__c, Name, Model__c, IsActive FROM Product2 WHERE Is_car__c =: TRUE];
+    public class wrapperProducts {
+        @AuraEnabled public String Id {get;set;}
+        @AuraEnabled public String name {get;set;}
+        @AuraEnabled public Decimal price {get;set;}
+        @AuraEnabled public String image {get;set;}
+        @AuraEnabled public String color {get;set;}
+        @AuraEnabled public String brand {get;set;}
+        @AuraEnabled public String type {get;set;}
+        @AuraEnabled public String model {get;set;}
+        @AuraEnabled public Boolean isActive {get;set;}
         
-        return listProducts;
+        
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<wrapperProducts> getProducts() {
+        List<Product2> listProducts = [SELECT Id, Color__c, Brand__c, Price__c, Type__c, Image__c, Name, Model__c, IsActive 
+                                        FROM Product2 
+                                        WHERE Is_car__c =: TRUE];
+        return getProductsWithFile(listProducts);
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<wrapperProducts> getProductsWithFile(List<Product2> listProducts) {
+        List<String> listProductsSt = new List<String>();
+        List<wrapperProducts> lstWrp = new List<wrapperProducts>();
+
+        
+        
+        for (Product2 prod : listProducts) {
+            listProductsSt.add(prod.Id);
+        }
+
+        Map<String, String> mapProductFile = FileUploaderClass.getProductsFiles(listProductsSt);
+        
+        for (Product2 prod : listProducts) {
+            if(mapProductFile.containsKey(prod.Id)){
+                wrapperProducts wrp = new wrapperProducts();
+                wrp.Id = prod.Id;
+                wrp.name = prod.Name;
+                wrp.price = prod.Price__c;
+                wrp.color = prod.Color__c;
+                wrp.brand = prod.Brand__c;
+                wrp.type = prod.Type__c;
+                wrp.model = prod.Model__c;
+                wrp.image = '/sirodcaragency/s/sfsites/c/sfc/servlet.shepherd/version/download/'+mapProductFile.get(prod.Id);
+                wrp.isActive = prod.IsActive;
+                lstWrp.add(wrp);
+
+            }
+        }
+
+        return lstWrp;
     }
 
     @AuraEnabled(cacheable=false)
-    public static List<Product2> getProductsRefresh() {
-        List<Product2> listProducts = new List<Product2>();
-
-        listProducts = [SELECT Id, Color__c, Brand__c, Price__c, Type__c, Image__c, Name, Model__c, IsActive FROM Product2 WHERE Is_car__c =: TRUE];
-        
-        return listProducts;
+    public static List<wrapperProducts> getProductsRefresh() {
+        List<Product2> listProducts = [SELECT Id, Color__c, Brand__c, Price__c, Type__c, Image__c, Name, Model__c, IsActive 
+                                        FROM Product2 
+                                        WHERE Is_car__c =: TRUE];
+        return getProductsWithFile(listProducts);
     }
 
     @AuraEnabled(cacheable=true)
@@ -31,30 +76,28 @@ public with sharing class DataTableCarsController {
         Schema.DescribeFieldResult objFieldModel = Product2.Model__c.getDescribe();
         List<Schema.PicklistEntry> lstPickListValuesModel = objFieldModel.getPickListValues();
 
+        Schema.DescribeFieldResult objFieldColor = Product2.Color__c.getDescribe();
+        List<Schema.PicklistEntry> lstPickListValuesColor = objFieldColor.getPickListValues();
+
         PicklistWrapper.wrapperListPL wrp = new PicklistWrapper.wrapperListPL();
         wrp.lstPicklistType = PicklistWrapper.createPickListFromPL(lstPickListValuesType);
         wrp.lstPicklistBrand = PicklistWrapper.createPickListFromPL(lstPickListValuesBrand);
         wrp.lstPicklistModel = PicklistWrapper.createPickListFromPL(lstPickListValuesModel);
+        wrp.lstPicklistColor = PicklistWrapper.createPickListFromPL(lstPickListValuesColor);
 
         return wrp;
         //return 'testReturn';
     }
-
     
-    
-
-    
-
     @AuraEnabled(cacheable=true)
-    public static List<Product2> searchProducts(String typeCar, String brandCar, String modelCar) {
-        System.debug(typeCar);
-        System.debug(brandCar);
+    public static List<wrapperProducts> searchProducts(String typeCar, String brandCar, String modelCar) {
+        
         List<Product2> listProducts = new List<Product2>();
         String queryProduct = '';
         Boolean orCondition = false;
         
         if(typeCar != '' || brandCar != '' || modelCar != ''){
-            queryProduct = 'SELECT Color__c, Brand__c, Type__c, Price__c, Image__c, Name, Model__c FROM Product2 WHERE Is_car__c = TRUE AND (';
+            queryProduct = 'SELECT Id, IsActive, Color__c, Brand__c, Type__c, Price__c, Image__c, Name, Model__c FROM Product2 WHERE Is_car__c = TRUE AND (';
             if(typeCar != ''){
                 queryProduct += ' Type__c LIKE \'%' + String.escapeSingleQuotes(typeCar) + '%\'';
                 orCondition = true;
@@ -69,23 +112,11 @@ public with sharing class DataTableCarsController {
                 queryProduct += ' Model__c LIKE \'%' + String.escapeSingleQuotes(modelCar) + '%\'';
             }
             queryProduct += ')';
-            System.debug(queryProduct);
+            
             listProducts = Database.query(queryProduct);
         }
         
         
-        return listProducts;
+        return getProductsWithFile(listProducts);
     }
-
-    /*public class wrapperListPL {
-        @AuraEnabled public List<wrpPickList> lstPicklistType {get;set;}
-        @AuraEnabled public List<wrpPickList> lstPicklistBrand {get;set;}
-        @AuraEnabled public List<wrpPickList> lstPicklistModel {get;set;}
-        
-    }
-
-    public class wrpPickList{
-        @AuraEnabled public String label {get;set;}
-        @AuraEnabled public String value {get;set;}
-    }*/
 }

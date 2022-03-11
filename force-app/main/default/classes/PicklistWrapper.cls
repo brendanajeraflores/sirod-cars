@@ -3,6 +3,7 @@ public with sharing class PicklistWrapper {
         @AuraEnabled public List<wrpPickList> lstPicklistType {get;set;}
         @AuraEnabled public List<wrpPickList> lstPicklistBrand {get;set;}
         @AuraEnabled public List<wrpPickList> lstPicklistModel {get;set;}
+        @AuraEnabled public List<wrpPickList> lstPicklistColor {get;set;}
         
     }
 

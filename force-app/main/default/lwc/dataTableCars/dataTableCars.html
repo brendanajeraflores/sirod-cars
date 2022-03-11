@@ -65,12 +65,20 @@
 		</div>
 
 		<div class="div-table">
-			<c-custom-data-table-cars
+
+			<!--<c-custom-data-table-cars
 				key-field="textCol"
 				columns={columns}
 				data={tableData}
 				hide-checkbox-column>
-			</c-custom-data-table-cars>
+			</c-custom-data-table-cars>-->
+			<c-image-data-table
+                key-field="id"
+                data={tableData}
+                show-row-number-column="false"
+                hide-checkbox-column
+                columns={columns}>
+ 			</c-image-data-table>
 		</div>
 		<!--<lightning-datatable key-field="id" data={data} columns={columns} hide-checkbox-column>
 		</lightning-datatable>-->
